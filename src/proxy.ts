@@ -66,9 +66,9 @@ const PROTECTED_ROUTES: RouteRule[] = [
  */
 const AUTH_ROUTES = /^\/auth\/(login|register|reset-password)(\/|$)/;
 
-// ─── Middleware ──────────────────────────────────────────────────────────────
+// ─── Proxy ──────────────────────────────────────────────────────────────────
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const token = await getToken({
@@ -144,7 +144,7 @@ function getDashboardForRole(role?: Role): string {
   }
 }
 
-// ─── Matcher — only run middleware on relevant paths ─────────────────────────
+// ─── Matcher — only run proxy on relevant paths ─────────────────────────────
 
 export const config = {
   matcher: [

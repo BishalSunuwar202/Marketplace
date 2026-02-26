@@ -8,7 +8,7 @@ import type { Role } from "@/generated/prisma/enums";
 
 /**
  * Client-side hook that redirects if the user doesn't have the required role.
- * This is a UX convenience — the middleware is the real security layer.
+ * This is a UX convenience — the proxy is the real security layer.
  */
 export function useRequireRole(requiredRole: Role, redirectTo = "/forbidden") {
   const { user, isLoading, isAuthenticated } = useCurrentUser();
