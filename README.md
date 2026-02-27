@@ -64,7 +64,7 @@ Create a `.env` file in the project root:
 
 ```env
 # Database
-DATABASE_URL="postgresql://user:password@localhost:5432/laptopmarket?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:1234/laptopmarket?schema=public"
 
 # NextAuth
 NEXTAUTH_URL="http://localhost:3000"
