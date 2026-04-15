@@ -2,10 +2,19 @@ import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
+import {
+  ORDER_STATUS_COLORS,
+  ROLE_COLORS,
+  formatLabel,
+} from "@/lib/constants";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
   if (!session?.user) redirect("/auth/login");
+
+  if (session.user.role !== "ADMIN" && session.user.role !== "SUPER_ADMIN") {
+    redirect("/forbidden");
+  }
 
   const [
     userCount,
@@ -35,23 +44,6 @@ export default async function AdminDashboardPage() {
       },
     }),
   ]);
-
-  const roleColors: Record<string, string> = {
-    USER: "bg-gray-100 text-gray-700",
-    SELLER: "bg-blue-100 text-blue-700",
-    ADMIN: "bg-purple-100 text-purple-700",
-    SUPER_ADMIN: "bg-red-100 text-red-700",
-  };
-
-  const statusColors: Record<string, string> = {
-    PENDING: "bg-yellow-100 text-yellow-800",
-    CONFIRMED: "bg-blue-100 text-blue-800",
-    SHIPPED: "bg-purple-100 text-purple-800",
-    DELIVERED: "bg-green-100 text-green-800",
-    CANCELLED: "bg-gray-100 text-gray-600",
-    REFUND_REQUESTED: "bg-orange-100 text-orange-800",
-    REFUNDED: "bg-red-100 text-red-800",
-  };
 
   return (
     <div>
@@ -114,9 +106,9 @@ export default async function AdminDashboardPage() {
                       </td>
                       <td className="px-4 py-3">
                         <span
-                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${roleColors[user.role] ?? "bg-gray-100 text-gray-600"}`}
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_COLORS[user.role] ?? "bg-gray-100 text-gray-600"}`}
                         >
-                          {user.role.replace("_", " ")}
+                          {formatLabel(user.role)}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-400">
@@ -169,9 +161,9 @@ export default async function AdminDashboardPage() {
                       </td>
                       <td className="px-4 py-3">
                         <span
-                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${statusColors[order.status] ?? "bg-gray-100 text-gray-600"}`}
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${ORDER_STATUS_COLORS[order.status] ?? "bg-gray-100 text-gray-600"}`}
                         >
-                          {order.status.replace("_", " ")}
+                          {formatLabel(order.status)}
                         </span>
                       </td>
                     </tr>
